@@ -18,18 +18,20 @@ if (!$post) {
 }
 ?>
 
-<h2>Edit Blog Post</h2>
+<div class="form-container center-form-container">
+    <h2>Edit Blog Post</h2>
 
-<form action="../scripts/update-blog.php" method="POST">
-    <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+    <form action="../scripts/update-blog.php" method="POST">
+        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
 
-    <label for="title">Title:</label><br>
-    <input type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required><br><br>
+        <label for="title">Title:</label>
+        <input type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required>
 
-    <label for="content">Content:</label><br>
-    <textarea name="content" rows="8" cols="60" required><?= htmlspecialchars($post['content']) ?></textarea><br><br>
+        <label for="content">Content:</label>
+        <textarea name="content" rows="8" required><?= htmlspecialchars($post['content']) ?></textarea>
 
-    <button type="submit">Update Blog</button>
-</form>
+        <button type="submit" class="primary-button">Update Blog</button>
+    </form>
+</div>
 
 <?php include('../includes/footer.php'); ?>

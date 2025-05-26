@@ -27,11 +27,12 @@ $posts = $stmt->fetchAll();
 
 <h2 class="blog-header">Blog Posts</h2>
 
-<div class="blog-search">
+<div class="blog-search" style="text-align: center;">
     <form method="GET" action="blog.php" class="search-section">
         <input type="text" name="search" placeholder="Search blog posts..." class="form-input" value="<?= htmlspecialchars($search) ?>">
         <button type="submit" class="primary-button">Search</button>
     </form>
+    <button type="button" id="clear-blog-search" class="primary-button" style="display: none; margin-top: 10px; ">Clear Results</button>
 </div>
 
 <br>
@@ -43,11 +44,11 @@ $posts = $stmt->fetchAll();
 <?php endif; ?>
 
 <?php if (count($posts) === 0): ?>
-    <p>No blog posts yet.</p>
+    <p style="text-align: center; color: #da42cd;">No blog posts yet.</p>
 <?php else: ?>
-    <ul class="post-list">
+    <div class="post-list">
         <?php foreach ($posts as $post): ?>
-            <li class="post-card">
+            <div class="post-card">
                 <p class="author">user: <?= htmlspecialchars($post['username']) ?></p>
                 <h4><?= htmlspecialchars($post['title']) ?></h4>
                 <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
@@ -58,9 +59,9 @@ $posts = $stmt->fetchAll();
                         <a href="../scripts/delete-blog.php?id=<?= $post['id'] ?>" onclick="return confirm('Delete this post?');">Delete</a>
                     </div>
                 <?php endif; ?>
-            </li>
+            </div>
         <?php endforeach; ?>
-    </ul>
+    </div>
 <?php endif; ?>
 
 
@@ -80,5 +81,19 @@ $posts = $stmt->fetchAll();
     </div>
     <br>
 <?php endif; ?>
+
+<script>
+    const searchInput = document.querySelector('input[name="search"]');
+    const clearBtn = document.getElementById('clear-blog-search');
+
+    if (searchInput.value.trim() !== '') {
+        clearBtn.style.display = 'inline-block';
+    }
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        window.location.href = window.location.pathname;
+    });
+</script>
 
 <?php include('../includes/footer.php'); ?>

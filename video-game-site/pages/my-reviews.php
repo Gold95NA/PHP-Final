@@ -12,6 +12,8 @@ $stmt->execute([$userId]);
 $reviews = $stmt->fetchAll();
 ?>
 
+<h2 style="text-align: center;">My Reviews</h2>
+
 <div class="search-section">
     <form id="game-search-form">
         <input type="text" id="search-query" placeholder="Search a game..." required>
@@ -20,8 +22,7 @@ $reviews = $stmt->fetchAll();
 </div>
 
 <div id="results"></div>
-
-<h2>My Reviews</h2>
+<button id="clear-results" class="primary-button" style="display:none; margin: 20px auto;">Clear Results</button>
 
 <?php if (isset($_GET['success'])): ?>
     <p style="color: green;">Review submitted successfully!</p>
@@ -70,27 +71,37 @@ $reviews = $stmt->fetchAll();
 <?php endif; ?>
 
 <script>
-document.getElementById('game-search-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const query = document.getElementById('search-query').value;
+    document.getElementById('game-search-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('search-query').value;
 
-    fetch(`../api/fetch-game.php?q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-            const results = document.getElementById('results');
-            results.innerHTML = '';
-            data.forEach(game => {
-                const gameDiv = document.createElement('div');
-                gameDiv.classList.add('game-card');
-                gameDiv.innerHTML = `
-                    <h3><a href="game-desc.php?id=${game.id}">${game.name}</a></h3>
-                    <img src="${game.background_image}" width="180"><br>
-                    <a href="review-form.php?id=${game.id}&title=${encodeURIComponent(game.name)}">Review this game</a>
-                `;
-                results.appendChild(gameDiv);
+        fetch(`../api/fetch-game.php?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const results = document.getElementById('results');
+                const clearBtn = document.getElementById('clear-results');
+                results.innerHTML = '';
+                data.forEach(game => {
+                    const gameDiv = document.createElement('div');
+                    gameDiv.classList.add('search-result-card');
+                    gameDiv.innerHTML = `
+                        <h3><a href="game-desc.php?id=${game.id}">${game.name}</a></h3>
+                        <img src="${game.background_image}" width="180"><br>
+                        <a href="review-form.php?id=${game.id}&title=${encodeURIComponent(game.name)}">Review this game</a>
+                    `;
+                    results.appendChild(gameDiv);
+                });
+
+                if (data.length > 0) {
+                    clearBtn.style.display = 'block';
+                }
             });
-        });
-});
+    });
+
+    document.getElementById('clear-results').addEventListener('click', function() {
+        document.getElementById('results').innerHTML = '';
+        this.style.display = 'none';
+    });
 </script>
 
 <?php include('../includes/footer.php'); ?>

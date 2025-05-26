@@ -16,13 +16,14 @@ include('../includes/header.php');
 <br>
 
 <?php if (isLoggedIn()): ?>
-    <div style="margin-bottom: 20px;">
+    <div style="text-align: right; margin-bottom: 20px; margin-right: 30px;">
         <a href="my-reviews.php"><button class="primary-button">My Reviews</button></a>
         <a href="my-blogs.php"><button class="primary-button">My Blogs</button></a>
     </div>
 <?php endif; ?>
 
 <div id="results"></div>
+<button id="clear-results" class="primary-button" style="display:none; margin: 20px auto; display: block;">Clear Results</button>
 
 <div class="content-columns">
     <div class="recent-reviews">
@@ -92,6 +93,7 @@ include('../includes/header.php');
             .then(response => response.json())
             .then(data => {
                 const results = document.getElementById('results');
+                const clearBtn = document.getElementById('clear-results');
                 results.innerHTML = '';
                 data.forEach(game => {
                     const gameDiv = document.createElement('div');
@@ -103,7 +105,16 @@ include('../includes/header.php');
                     `;
                     results.appendChild(gameDiv);
                 });
+
+                if (data.length > 0) {
+                    clearBtn.style.display = 'block';
+                }
             });
+    });
+
+    document.getElementById('clear-results').addEventListener('click', function() {
+        document.getElementById('results').innerHTML = '';
+        this.style.display = 'none';
     });
 </script>
 
