@@ -4,17 +4,15 @@ requireLogin();
 include('../includes/header.php');
 ?>
 
-<h2>My Account</h2>
-<p class="author">Welcome, <?= htmlspecialchars($_SESSION['username']) ?>!</p>
+<main class="page-container">
+    <div class="account-box">
+        <h2>My Account</h2>
+        <p>Welcome, <?= htmlspecialchars($_SESSION['username']) ?>!</p>
 
-<a href="my-reviews.php">
-    <button>View My Reviews</button>
-</a>
-<a href="edit-account.php">
-    <button>Update My Account</button>
-</a>
-<a href="my-blogs.php">
-    <button>View My Blogs</button>
-</a>
+        <a href="edit-account.php"><button class="primary-button">Edit Account</button></a>
+        <a href="my-reviews.php"><button class="primary-button">My Reviews</button></a>
+        <a href="my-blogs.php"><button class="primary-button">My Blogs</button></a>
+    </div>
+</main>
 
 <?php include('../includes/footer.php'); ?>

@@ -17,8 +17,8 @@ include('../includes/header.php');
 
 <?php if (isLoggedIn()): ?>
     <div style="margin-bottom: 20px;">
-        <a href="my-reviews.php"><button>My Reviews</button></a>
-        <a href="my-blogs.php"><button>My Blogs</button></a>
+        <a href="my-reviews.php"><button class="primary-button">My Reviews</button></a>
+        <a href="my-blogs.php"><button class="primary-button">My Blogs</button></a>
     </div>
 <?php endif; ?>
 
@@ -55,7 +55,7 @@ include('../includes/header.php');
 
                 <strong>Rating:</strong> <?= $review['rating'] ?>/5<br>
                 <p class="author"><strong>By:</strong> <?= htmlspecialchars($review['username']) ?></p>
-                <a href="review-form.php?id=<?= $review['game_id'] ?>&title=<?= urlencode($review['game_title']) ?>">Review this game</a>
+                <a class="review-link" href="review-form.php?id=<?= $review['game_id'] ?>&title=<?= urlencode($review['game_title']) ?>">Review this game</a>
             </div>
         <?php endforeach; ?>
     </div>
@@ -84,27 +84,27 @@ include('../includes/header.php');
     </div>
 </div>
 <script>
-document.getElementById('game-search-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const query = document.getElementById('search-query').value;
+    document.getElementById('game-search-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('search-query').value;
 
-    fetch(`../api/fetch-game.php?q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-            const results = document.getElementById('results');
-            results.innerHTML = '';
-            data.forEach(game => {
-                const gameDiv = document.createElement('div');
-                gameDiv.classList.add('game-card');
-                gameDiv.innerHTML = `
-                    <h3><a href="game-desc.php?id=${game.id}">${game.name}</a></h3>
-                    <img src="${game.background_image}" width="180"><br>
-                    <a href="review-form.php?id=${game.id}&title=${encodeURIComponent(game.name)}">Review this game</a>
-                `;
-                results.appendChild(gameDiv);
+        fetch(`../api/fetch-game.php?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const results = document.getElementById('results');
+                results.innerHTML = '';
+                data.forEach(game => {
+                    const gameDiv = document.createElement('div');
+                    gameDiv.classList.add('search-result-card');
+                    gameDiv.innerHTML = `
+                        <h3><a href="game-desc.php?id=${game.id}">${game.name}</a></h3>
+                        <img src="${game.background_image}" width="180"><br>
+                        <a href="review-form.php?id=${game.id}&title=${encodeURIComponent(game.name)}">Review this game</a>
+                    `;
+                    results.appendChild(gameDiv);
+                });
             });
-        });
-});
+    });
 </script>
 
 <?php include('../includes/footer.php'); ?>

@@ -6,25 +6,34 @@ include('../includes/header.php');
 
 $userId = $_SESSION['user_id'];
 
-// Fetch current user data
-$stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch();
+
+if (!$user) {
+    echo "<p>User not found.</p>";
+    include('../includes/footer.php');
+    exit;
+}
 ?>
 
-<h2>Update My Account</h2>
+<div class="form-container">
+    <div class="account-edit">
+        <h2>Edit Account</h2>
 
-<form action="../scripts/update-account.php" method="POST">
-    <label for="username">Username:</label><br>
-    <input type="text" name="username" required value="<?= htmlspecialchars($user['username']) ?>"><br><br>
+        <form action="../scripts/update-account.php" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" required>
 
-    <label for="email">Email:</label><br>
-    <input type="email" name="email" required value="<?= htmlspecialchars($user['email']) ?>"><br><br>
+            <label for="password">New Password:</label>
+            <input type="password" name="password">
 
-    <label for="password">New Password (leave blank to keep current):</label><br>
-    <input type="password" name="password"><br><br>
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" name="confirm_password">
 
-    <button type="submit">Save Changes</button>
-</form>
+            <button type="submit" class="primary-button">Update Account</button>
+        </form>
+    </div>
+</div>
 
 <?php include('../includes/footer.php'); ?>

@@ -38,20 +38,33 @@ $reviews = $stmt->fetchAll();
             $gameData = json_decode(file_get_contents($gameApiUrl), true);
             $image = $gameData['background_image'] ?? '';
             ?>
-            <li style="margin-bottom: 30px;">
-                <h3>
-                    <a href="game-desc.php?id=<?= $review['game_id'] ?>">
-                        <?= htmlspecialchars($review['game_title']) ?>
-                    </a> (<?= $review['rating'] ?>/5)
-                </h3>
-                <?php if ($image): ?>
-                    <img src="<?= $image ?>" alt="<?= htmlspecialchars($review['game_title']) ?>" width="250"><br>
-                <?php endif; ?>
-                <p><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
+            <div class="review-card">
+                <div class="review-content">
+                    <h3>
+                        <a href="game-desc.php?id=<?= $review['game_id'] ?>">
+                            <?= htmlspecialchars($review['game_title']) ?>
+                        </a>
+                        <span class="rating">(<?= $review['rating'] ?>/5)</span>
+                    </h3>
 
-                <a href="edit-review.php?id=<?= $review['id'] ?>">Edit</a> |
-                <a href="../scripts/delete-review.php?id=<?= $review['id'] ?>" onclick="return confirm('Are you sure you want to delete this review?');">Delete</a>
-            </li>
+                    <?php if (!empty($review['username'])): ?>
+                        <p class="author">Reviewed by: <?= htmlspecialchars($review['username']) ?></p>
+                    <?php endif; ?>
+
+                    <p><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
+
+                    <?php if (isset($review['user_id']) && $review['user_id'] === $_SESSION['user_id']): ?>
+                        <div class="review-actions">
+                            <a href="edit-review.php?id=<?= $review['id'] ?>">Edit</a>
+                            <a href="../scripts/delete-review.php?id=<?= $review['id'] ?>" onclick="return confirm('Are you sure you want to delete this review?')">Delete</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <?php if (!empty($image)): ?>
+                    <img src="<?= $image ?>" alt="<?= htmlspecialchars($review['game_title']) ?>">
+                <?php endif; ?>
+            </div>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>

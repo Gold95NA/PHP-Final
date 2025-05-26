@@ -20,42 +20,50 @@ $stmt->execute([$gameId]);
 $reviews = $stmt->fetchAll();
 ?>
 
-<h2><?= htmlspecialchars($game['name']) ?></h2>
+<div class="game-details-card">
+    <h2><?= htmlspecialchars($game['name']) ?></h2>
 
-<?php if (!empty($game['background_image'])): ?>
-    <img src="<?= $game['background_image'] ?>" width="400"><br><br>
-<?php endif; ?>
+    <?php if (!empty($game['background_image'])): ?>
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <img src="<?= $game['background_image'] ?>" alt="<?= htmlspecialchars($game['name']) ?>" style="width: 100%; max-width: 400px; border-radius: 10px;">
+            <?php if (isLoggedIn()): ?>
+                <a href="review-form.php?id=<?= $game['id'] ?>&title=<?= urlencode($game['name']) ?>">
+                    <button class="primary-button" style="margin-top: 10px;">Review This Game</button>
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
-<?php if (isLoggedIn()): ?>
-    <a href="review-form.php?id=<?= $game['id'] ?>&title=<?= urlencode($game['name']) ?>">
-        <button>Review This Game</button>
-    </a>
-<?php endif; ?>
+    <p><strong class="category">Released:</strong> <?= htmlspecialchars($game['released']) ?></p>
 
-<p><strong>Released:</strong> <?= htmlspecialchars($game['released']) ?></p>
-<p><strong>Genres:</strong>
-    <?php
-    $genres = array_map(fn($g) => $g['name'], $game['genres']);
-    echo htmlspecialchars(implode(', ', $genres));
-    ?>
-</p>
-<p><?= $game['description_raw'] ?? '' ?></p>
+    <p><strong class="category">Genres:</strong>
+        <?php
+        $genres = array_map(fn($g) => $g['name'], $game['genres']);
+        echo htmlspecialchars(implode(', ', $genres));
+        ?>
+    </p>
 
-<hr>
-<h3>User Reviews</h3>
+    <p><?= htmlspecialchars($game['description_raw']) ?></p>
+</div>
 
-<?php if (count($reviews) === 0): ?>
-    <p>No reviews yet for this game.</p>
-<?php else: ?>
-    <ul>
+<div class="user-reviews-section">
+    <h3>User Reviews</h3>
+
+    <?php if (count($reviews) === 0): ?>
+        <p>No reviews yet for this game.</p>
+    <?php else: ?>
         <?php foreach ($reviews as $review): ?>
-            <li style="margin-bottom: 25px;">
-                <strong><?= htmlspecialchars($review['username']) ?>:</strong>
-                <span><?= $review['rating'] ?>/5</span><br>
-                <p><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
-            </li>
+            <div class="review-card">
+                <div class="review-content">
+                    <h3>
+                        <span class="author"><?= htmlspecialchars($review['username']) ?></span>
+                        <span class="rating">(<?= $review['rating'] ?>/5)</span>
+                    </h3>
+                    <p><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
+                </div>
+            </div>
         <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    <?php endif; ?>
+</div>
 
 <?php include('../includes/footer.php'); ?>

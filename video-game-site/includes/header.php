@@ -38,7 +38,7 @@ require_once('auth.php');
         ?>
             <div class="back-button-container">
                 <a href="<?= htmlspecialchars($_SERVER['HTTP_REFERER']) ?>">
-                    <button>⬅ Back</button>
+                    <button class="primary-button">⬅ Back</button>
                 </a>
             </div>
         <?php endif; ?>

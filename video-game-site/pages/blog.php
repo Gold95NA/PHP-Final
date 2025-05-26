@@ -25,52 +25,60 @@ if ($search) {
 $posts = $stmt->fetchAll();
 ?>
 
-<?php if (isLoggedIn()): ?>
-    <a href="my-blogs.php"><button>My Blogs</button></a>
-<?php endif; ?>
+<h2 class="blog-header">Blog Posts</h2>
 
-
-<?php if (isLoggedIn()): ?>
-    <h2>Write a Blog Post</h2>
-
-    <form action="../scripts/submit-blog.php" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" name="title" required><br><br>
-
-        <label for="content">Content:</label><br>
-        <textarea name="content" rows="8" cols="60" required></textarea><br><br>
-
-        <button type="submit">Post Blog</button>
+<div class="blog-search">
+    <form method="GET" action="blog.php" class="search-section">
+        <input type="text" name="search" placeholder="Search blog posts..." class="form-input" value="<?= htmlspecialchars($search) ?>">
+        <button type="submit" class="primary-button">Search</button>
     </form>
+</div>
 
-    <hr>
-<?php endif; ?>
-
-<h2>All Blog Posts</h2>
-
-<form method="GET" action="blog.php">
-    <input type="text" name="search" placeholder="Search blog posts..." value="<?= htmlspecialchars($search) ?>">
-    <button type="submit">Search</button>
-</form>
 <br>
+
+<?php if (isLoggedIn()): ?>
+    <div style="text-align: right; margin-bottom: 20px; margin-right: 30px;">
+        <a href="my-blogs.php"><button class="primary-button">My Blogs</button></a>
+    </div>
+<?php endif; ?>
 
 <?php if (count($posts) === 0): ?>
     <p>No blog posts yet.</p>
 <?php else: ?>
-    <ul>
+    <ul class="post-list">
         <?php foreach ($posts as $post): ?>
-            <li style="margin-bottom: 30px;">
-                <h3><?= htmlspecialchars($post['title']) ?></h3>
-                <p class="author"><strong>By:</strong> <?= htmlspecialchars($post['username']) ?></p>
+            <li class="post-card">
+                <p class="author">user: <?= htmlspecialchars($post['username']) ?></p>
+                <h4><?= htmlspecialchars($post['title']) ?></h4>
                 <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
 
                 <?php if (isLoggedIn() && $_SESSION['user_id'] == $post['user_id']): ?>
-                    <a href="edit-blog.php?id=<?= $post['id'] ?>">Edit</a> |
-                    <a href="../scripts/delete-blog.php?id=<?= $post['id'] ?>" onclick="return confirm('Delete this post?');">Delete</a>
+                    <div class="review-actions">
+                        <a href="edit-blog.php?id=<?= $post['id'] ?>">Edit</a> |
+                        <a href="../scripts/delete-blog.php?id=<?= $post['id'] ?>" onclick="return confirm('Delete this post?');">Delete</a>
+                    </div>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
+<?php endif; ?>
+
+
+<?php if (isLoggedIn()): ?>
+    <div class="form-container center-card">
+        <h2>Write a Blog Post</h2>
+
+        <form action="../scripts/submit-blog.php" method="POST">
+            <label for="title">Title:</label>
+            <input type="text" name="title" class="form-input" required>
+
+            <label for="content">Content:</label>
+            <textarea name="content" rows="6" class="form-input" required></textarea>
+
+            <button type="submit" class="primary-button">Post Blog</button>
+        </form>
+    </div>
+    <br>
 <?php endif; ?>
 
 <?php include('../includes/footer.php'); ?>

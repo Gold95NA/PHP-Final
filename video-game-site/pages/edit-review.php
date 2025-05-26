@@ -23,22 +23,27 @@ $gameData = json_decode(file_get_contents($gameApiUrl), true);
 $image = $gameData['background_image'] ?? '';
 ?>
 
-<h2>Edit Review: <?= htmlspecialchars($review['game_title']) ?></h2>
+<div class="form-container">
+    <h2>Edit Your Review for <?= htmlspecialchars($review['game_title']) ?></h2>
 
-<?php if ($image): ?>
-    <img src="<?= $image ?>" alt="<?= htmlspecialchars($review['game_title']) ?>" width="300"><br><br>
-<?php endif; ?>
+    <?php if (!empty($image)): ?>
+        <div class="game-preview-image">
+            <img src="<?= $image ?>" alt="Game image">
+        </div>
+    <?php endif; ?>
 
-<form action="../scripts/update-review.php" method="POST">
-    <input type="hidden" name="review_id" value="<?= $review['id'] ?>">
+    <form action="../scripts/update-review.php" method="POST">
+        <input type="hidden" name="review_id" value="<?= $review['id'] ?>">
 
-    <label for="rating">Rating (1–5):</label><br>
-    <input type="number" name="rating" min="1" max="5" required value="<?= $review['rating'] ?>"><br><br>
+        <label for="rating">Rating (1–5):</label>
+        <input type="number" name="rating" min="1" max="5" value="<?= $review['rating'] ?>" required>
 
-    <label for="review_text">Your Review:</label><br>
-    <textarea name="review_text" rows="6" cols="50" required><?= htmlspecialchars($review['review_text']) ?></textarea><br><br>
+        <label for="review">Your Review:</label>
+        <textarea name="review" required><?= htmlspecialchars($review['review_text']) ?></textarea>
 
-    <button type="submit">Update Review</button>
-</form>
+        <button type="submit" class="primary-button">Update Review</button>
+    </form>
+</div>
+
 
 <?php include('../includes/footer.php'); ?>
