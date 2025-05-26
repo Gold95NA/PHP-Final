@@ -1,0 +1,85 @@
+<?php
+include('../includes/db.php');
+include('../includes/header.php');
+
+$apiKey = '69f3eef59d5944b7aaa6af836d6a8691'; 
+
+$stmt = $pdo->query("
+    SELECT r.*, u.username
+    FROM reviews r
+    JOIN users u ON r.user_id = u.id
+    ORDER BY r.created_at DESC
+");
+$reviews = $stmt->fetchAll();
+
+?>
+
+<div class="search-section">
+    <form id="game-search-form">
+        <input type="text" id="search-query" placeholder="Search a game..." required>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<hr>
+
+<?php if (isLoggedIn()): ?>
+    <a href="my-reviews.php"><button>My Reviews</button></a>
+<?php endif; ?>
+
+
+<div id="results"></div>
+
+<h2>All Reviews</h2>
+
+<?php if (count($reviews) === 0): ?>
+    <p>No reviews have been posted yet.</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($reviews as $review): ?>
+            <?php
+            $gameApiUrl = "https://api.rawg.io/api/games/{$review['game_id']}?key=$apiKey";
+            $gameData = json_decode(file_get_contents($gameApiUrl), true);
+            $image = $gameData['background_image'] ?? '';
+            ?>
+            <li style="margin-bottom: 30px;">
+                <h3>
+                    <a href="game-desc.php?id=<?= $review['game_id'] ?>">
+                        <?= htmlspecialchars($review['game_title']) ?>
+                    </a> (<?= $review['rating'] ?>/5)
+                </h3>
+                <p class="author"><strong>Reviewed by:</strong> <?= htmlspecialchars($review['username']) ?></p>
+                <?php if ($image): ?>
+                    <img src="<?= $image ?>" alt="<?= htmlspecialchars($review['game_title']) ?>" width="250"><br>
+                <?php endif; ?>
+                <p><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<script>
+document.getElementById('game-search-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const query = document.getElementById('search-query').value;
+
+    fetch(`../api/fetch-game.php?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            data.forEach(game => {
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game-card');
+                gameDiv.innerHTML = `
+                    <h3><a href="game-desc.php?id=${game.id}">${game.name}</a></h3>
+                    <img src="${game.background_image}" width="180"><br>
+                    <a href="review-form.php?id=${game.id}&title=${encodeURIComponent(game.name)}">Review this game</a>
+                `;
+                results.appendChild(gameDiv);
+            });
+        });
+});
+</script>
+
+<?php include('../includes/footer.php'); ?>

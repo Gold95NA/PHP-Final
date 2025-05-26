@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'Boldonse';
+    src: url('../fonts/Boldonse-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'LuxuriousRoman';
+    src: url('../fonts/LuxuriousRoman-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'LuxuriousRoman', sans-serif;
+    background-color: #1b1b1b;
+    color: #f3f0f2;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    font-family: 'Boldonse', serif;
+    color: #37b978;
+}
+
+h4 {
+    font-family: 'Boldonse', serif;
+    color: #d19c08;
+}
+
+.author {
+    color: #da42cd;
+}
+
+.search-section {
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-bottom: 2px solid #da42cd;
+    text-align: center;
+}
+
+#search-query {
+    width: 60%;
+    max-width: 500px;
+    font-size: 16px;
+}
+
+
+
+.game-card, .post-preview {
+    background-color: #222;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+}
+
+.game-card:hover, .post-preview:hover {
+    transform: scale(1.02);
+}
+
+.content-columns {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.recent-reviews, .recent-posts {
+    flex: 1;
+}
+
+footer {
+    text-align: center;
+    color: #ccc;
+    position: relative;
+    width: 100%;
+    background-color: #1b1b1b; 
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: #1b1b1b;
+}
+
+.logo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #222222;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.site-title {
+    font-family: 'Boldonse', serif;
+    font-size: 28px;
+    color: #d19c08;
+    padding-top: 10px;
+    margin: 0;
+    line-height: 1;
+}
+
+.site-subtitle {
+    font-family: 'LuxuriousRoman', sans-serif;
+    font-size: 14px;
+    color: #da42cd;
+    margin-top: 5px;
+}
+
+.main-nav a {
+    margin-left: 20px;
+    font-weight: bold;
+    color: #d19c08;
+    text-decoration: none;
+}
+
+.main-nav a:hover {
+    color: #e06e10;
+}
+
+.back-button-container {
+    margin: 10px 30px;
+}
