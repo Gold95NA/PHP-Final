@@ -23,7 +23,7 @@ include('../includes/header.php');
 <?php endif; ?>
 
 <div id="results"></div>
-<button id="clear-results" class="primary-button" style="display:none; margin: 20px auto; display: block;">Clear Results</button>
+<button id="clear-results" class="primary-button" style="display:none; margin: 20px auto;">Clear Results</button>
 
 <div class="content-columns">
     <div class="recent-reviews">

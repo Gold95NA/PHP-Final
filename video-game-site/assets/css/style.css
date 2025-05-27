@@ -672,10 +672,3 @@ textarea:focus {
     margin-left: 20px;
 }
 
-#results {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 30px;
-}
